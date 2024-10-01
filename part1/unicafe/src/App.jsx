@@ -44,6 +44,7 @@ const Stat = ({good, neutral, bad, total}) => {
         <Table feedBack={good} text={"good"}/>
         <Table feedBack={neutral} text={"neutral"}/>
         <Table feedBack={bad} text={"bad"}/>
+        <Table feedBack={total} text={"total"}/>
         <tr>
           <td>average</td>
           <td>{avg}</td>
