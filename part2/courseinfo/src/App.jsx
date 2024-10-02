@@ -8,20 +8,25 @@ const Header = ({title}) => {
 
 const Part = ({name}) => {
   return (
-    <div>
-      <ul>
-        {name.parts.map(parts =>
-          <li key={parts.id}>{parts.name} {parts.exercises}</li>
-        )}
-      </ul>
-    </div>
+    <ul>
+      {name.parts.map(parts =>
+        <li key={parts.id}>{parts.name} {parts.exercises}</li>
+      )}
+    </ul>
   )
 }
 
 const Content = ({content}) => {
+  const exercises = content.parts.map(exercise => exercise.exercises)
+  const initialValue = 0;
+  const sumWithInitial = exercises.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    initialValue,
+  );
   return (
     <div>
         <Part name={content}/>
+      <b>total of {sumWithInitial} exercises</b>
     </div>
   )
 }
@@ -54,6 +59,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
