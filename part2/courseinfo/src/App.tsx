@@ -1,61 +1,72 @@
+import {useState, useEffect, ChangeEvent} from 'react'
+import axios from 'axios'
+import Note from './components/Note'
 import React from 'react'
-import { useState } from 'react'
-import Persons from './components/Persons'
-import PersonForm from "./components/PersonForm";
-import Filter from "./components/Filter";
+
+interface Notes {
+  id: number;
+  content: string;
+  date: string;
+  important: boolean;
+}
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', number: '040-123456', id: 1},
-    {name: 'Ada Lovelace', number: '39-44-5323523', id: 2},
-    {name: 'Dan Abramov', number: '12-43-234345', id: 3},
-    {name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
+  const [notes, setNotes] = useState<Notes[]>([])
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(false)
 
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewName(event.target.value)
-  }
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, [])
 
-  const handleChangeNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewNumber(event.target.value)
-  }
+  console.log('render', notes.length, 'notes')
 
-  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value)
-  }
-
-  const addNewName = (event: React.ChangeEvent<HTMLFormElement>) => {
+  const addNote = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const nameObject = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1,
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5,
+      date: new Date().toISOString(),
+      id: notes.length + 1,
     }
 
-    const found = persons.some(el => el.name.toUpperCase() === newName.toUpperCase())
-
-    if(!found){
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
-    } else {
-      alert(newName + ' is already added to phonebook')
-    }
+    setNotes(notes.concat(noteObject))
+    setNewNote('')
   }
+
+  const handleNoteChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNewNote(event.target.value)
+  }
+
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important)
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <Filter handleFilter={handleFilter} filter={filter}/>
-
-      <h2>Add a new </h2>
-      <PersonForm addNewName={addNewName} handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} newName={newName} newNumber={newNumber}/>
-
-      <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all' }
+        </button>
+      </div>
+      <ul>
+        <ul>
+          {notesToShow.map(note =>
+            <Note key={note.id} note={note} />
+          )}
+        </ul>
+      </ul>
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>
     </div>
   )
 }
