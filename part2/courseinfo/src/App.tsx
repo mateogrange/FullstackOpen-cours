@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 
 const App = () => {
@@ -11,26 +12,28 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  const handleChangeName = (event) => {
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value)
   }
 
-  const handleChangeNumber = (event) => {
+  const handleChangeNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewNumber(event.target.value)
   }
 
-  const handleFilter = (event) => {
+  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(event.target.value)
   }
 
-  const addNewName = (event) => {
+  const addNewName = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
     const nameObject = {
       name: newName,
       number: newNumber,
       id: persons.length + 1,
     }
+
     const found = persons.some(el => el.name.toUpperCase() === newName.toUpperCase())
+
     if(!found){
       setPersons(persons.concat(nameObject))
       setNewName('')
@@ -39,12 +42,12 @@ const App = () => {
       alert(newName + ' is already added to phonebook')
     }
   }
-
+  const name = persons[0].name
   return (
     <div>
       <h2>Phonebook</h2>
       <form>
-        <div>filter shown with <input onChange={handleFilter}  value={filter}/></div>
+        <div>filter shown with <input onChange={handleFilter} value={filter}/></div>
       </form>
 
       <h2>Add a new </h2>
@@ -57,8 +60,10 @@ const App = () => {
       </form>
 
       <h2>Numbers</h2>
-      {persons.map((person, index) =>
-        <li key={index}>{person.name} {person.number}</li>
+      {persons.map((person, index) => {
+          if (person.name.includes(filter) === true)
+            return <li key={index}>{person.name} {person.number}</li>
+        }
       )}
     </div>
   )
