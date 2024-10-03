@@ -1,12 +1,15 @@
 import React from 'react'
 import { useState } from 'react'
+import Persons from './components/Persons'
+import PersonForm from "./components/PersonForm";
+import Filter from "./components/Filter";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+    {name: 'Arto Hellas', number: '040-123456', id: 1},
+    {name: 'Ada Lovelace', number: '39-44-5323523', id: 2},
+    {name: 'Dan Abramov', number: '12-43-234345', id: 3},
+    {name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -42,29 +45,17 @@ const App = () => {
       alert(newName + ' is already added to phonebook')
     }
   }
-  const name = persons[0].name
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>filter shown with <input onChange={handleFilter} value={filter}/></div>
-      </form>
+      <Filter handleFilter={handleFilter} filter={filter}/>
 
       <h2>Add a new </h2>
-      <form onSubmit={addNewName}>
-        <div>name: <input onChange={handleChangeName} value={newName}/></div>
-        <div>number: <input onChange={handleChangeNumber} value={newNumber}/></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm addNewName={addNewName} handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} newName={newName} newNumber={newNumber}/>
 
       <h2>Numbers</h2>
-      {persons.map((person, index) => {
-          if (person.name.includes(filter) === true)
-            return <li key={index}>{person.name} {person.number}</li>
-        }
-      )}
+      <Persons persons={persons} filter={filter}/>
     </div>
   )
 }
