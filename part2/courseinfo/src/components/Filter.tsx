@@ -8,7 +8,7 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({handleFilter, filter}) => {
   return (
     <form>
-      <div>filter shown with <input onChange={handleFilter} value={filter}/></div>
+      <div>Find countries <input onChange={handleFilter} value={filter}/></div>
     </form>
   )
 }

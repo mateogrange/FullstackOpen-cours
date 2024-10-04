@@ -1,8 +1,22 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
+
+interface Countries {
+  cca2: string;
+  name: {
+    common: string;
+  };
+  capital: string[];
+  area: number;
+  languages: {
+    [key: string]: string
+  };
+  flag: string;
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -14,6 +28,16 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [allCountires, setAllCountries] = useState<Countries[]>([])
+
+  useEffect(() => {
+    axios
+      .get('https://restcountries.com/v3.1/all')
+      .then(response => {
+          // console.log(response.data)
+        setAllCountries(response.data)
+      })
+  }, []);
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value)
@@ -48,14 +72,37 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Countries</h2>
       <Filter handleFilter={handleFilter} filter={filter}/>
 
-      <h2>Add a new </h2>
-      <PersonForm addNewName={addNewName} handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} newName={newName} newNumber={newNumber}/>
+      <div>
+        {console.log (allCountires.length)}
 
-      <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+          {allCountires.map((countries) =>
+            <div key={countries.cca2}>
+              <h2>{countries.name.common}</h2>
+              <p>capital: {countries.capital}</p>
+              <p>area: {countries.area} </p>
+              <b>languages:</b>
+              <div>
+              {countries.languages ? (
+                <ul>
+                  {Object.entries(countries.languages).map(([key, value]:[string, string]) => (
+                    <li key={key}>{value}</li>
+                  ))}
+                </ul>
+              ): (
+                <ul>
+                  <li>No languages define</li>
+                </ul>
+              )}
+              </div>
+              <div style={{ fontSize: '100px' }}>
+                {countries.flag}
+              </div>
+            </div>
+          )}
+      </div>
     </div>
   )
 }
