@@ -29,13 +29,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [allCountries, setAllCountries] = useState<Countries[]>([])
-  const [countrie, setCountrie] = useState('')
+  const [nbCountrie, setNbCountrie] = useState([])
 
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
-          // console.log(response.data)
         setAllCountries(response.data)
       })
   }, []);
@@ -87,12 +86,13 @@ const App = () => {
       <div>
         {allCountries.map((countries, index) => {
           const countriesName = countries.name.common.toLowerCase()
-
-          if (countriesName.includes(filter.toLowerCase()))
-
+          if (countriesName.includes(filter.toLowerCase())) {
+            //stocker tout les pays dans {nbCountrie} pour pouvoir les compter avec .length
+            console.log(countriesName) //voir comment compter le nombre de pays avec une boucle peut etre
             return (
               <li key={countries.cca2}>{countries.name.common}</li>
             )
+          }
           }
         )}
       </div>
