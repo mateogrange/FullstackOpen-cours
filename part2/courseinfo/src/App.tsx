@@ -28,7 +28,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [allCountires, setAllCountries] = useState<Countries[]>([])
+  const [allCountries, setAllCountries] = useState<Countries[]>([])
+  const [countrie, setCountrie] = useState('')
 
   useEffect(() => {
     axios
@@ -74,35 +75,56 @@ const App = () => {
     <div>
       <h2>Countries</h2>
       <Filter handleFilter={handleFilter} filter={filter}/>
+      {/*<div>*/}
+      {/*  {allCountries.map((countries, index) => {*/}
+      {/*      const countriesName = countries.name.common.toLowerCase()*/}
+      {/*      if (countriesName.includes(filter.toLowerCase()))*/}
+      {/*        return <li key={countries.cca2}>{countries.name.common}</li>*/}
+      {/*    }*/}
+      {/*  )}*/}
+      {/*</div>*/}
 
       <div>
-        {console.log (allCountires.length)}
+        {allCountries.map((countries, index) => {
+          const countriesName = countries.name.common.toLowerCase()
 
-          {allCountires.map((countries) =>
-            <div key={countries.cca2}>
-              <h2>{countries.name.common}</h2>
-              <p>capital: {countries.capital}</p>
-              <p>area: {countries.area} </p>
-              <b>languages:</b>
-              <div>
-              {countries.languages ? (
-                <ul>
-                  {Object.entries(countries.languages).map(([key, value]:[string, string]) => (
-                    <li key={key}>{value}</li>
-                  ))}
-                </ul>
-              ): (
-                <ul>
-                  <li>No languages define</li>
-                </ul>
-              )}
-              </div>
-              <div style={{ fontSize: '100px' }}>
-                {countries.flag}
-              </div>
-            </div>
-          )}
+          if (countriesName.includes(filter.toLowerCase()))
+
+            return (
+              <li key={countries.cca2}>{countries.name.common}</li>
+            )
+          }
+        )}
       </div>
+
+      {/*<div>*/}
+      {/*  {allCountries.length < 10 ? 'test' :*/}
+
+      {/*    allCountries.map((countries) =>*/}
+      {/*      <div key={countries.cca2}>*/}
+      {/*        <h2>{countries.name.common}</h2>*/}
+      {/*        <p>capital: {countries.capital}</p>*/}
+      {/*        <p>area: {countries.area} </p>*/}
+      {/*        <b>languages:</b>*/}
+      {/*        <div>*/}
+      {/*          {countries.languages ? (*/}
+      {/*            <ul>*/}
+      {/*              {Object.entries(countries.languages).map(([key, value]:[string, string]) => (*/}
+      {/*                <li key={key}>{value}</li>*/}
+      {/*              ))}*/}
+      {/*            </ul>*/}
+      {/*          ): (*/}
+      {/*            <ul>*/}
+      {/*              <li>No languages define</li>*/}
+      {/*            </ul>*/}
+      {/*          )}*/}
+      {/*        </div>*/}
+      {/*        <div style={{ fontSize: '100px' }}>*/}
+      {/*          {countries.flag}*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*    )}*/}
+      {/*</div>*/}
     </div>
   )
 }
