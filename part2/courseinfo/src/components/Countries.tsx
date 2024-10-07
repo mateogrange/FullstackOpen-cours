@@ -9,7 +9,7 @@ interface Country {
   name: {
     common : string;
   };
-  capital: string;
+  capital: string[];
   area: number;
   languages: Languages;
   flag: string;
