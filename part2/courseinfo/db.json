@@ -1,1 +1,29 @@
-{}
+{
+  "notes": [
+    {
+      "id": "f1df",
+      "content": "test",
+      "important": false
+    },
+    {
+      "id": "b13a",
+      "content": "allo doude",
+      "important": false
+    },
+    {
+      "id": "3e00",
+      "content": "test de note importante",
+      "important": true
+    },
+    {
+      "id": "e267",
+      "content": "reTest",
+      "important": false
+    },
+    {
+      "id": "5bf8",
+      "content": "youpi",
+      "important": false
+    }
+  ]
+}
