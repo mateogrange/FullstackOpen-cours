@@ -1,9 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Persons from './components/Persons'
-import PersonForm from "./components/PersonForm";
+import axios, {all} from 'axios'
 import Filter from "./components/Filter";
+import Countries from "./components/Countries";
 
 interface Countries {
   cca2: string;
@@ -29,8 +28,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [allCountries, setAllCountries] = useState<Countries[]>([])
-  const [nbCountrie, setNbCountrie] = useState([])
-
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all')
@@ -70,61 +67,36 @@ const App = () => {
     }
   }
 
+  const filterCountries = () => {
+    return allCountries.filter((countries) => {
+      const countriesName = countries.name.common.toLowerCase();
+      return countriesName.includes(filter.toLowerCase());
+    });
+  };
+
   return (
     <div>
       <h2>Countries</h2>
       <Filter handleFilter={handleFilter} filter={filter}/>
-      {/*<div>*/}
-      {/*  {allCountries.map((countries, index) => {*/}
-      {/*      const countriesName = countries.name.common.toLowerCase()*/}
-      {/*      if (countriesName.includes(filter.toLowerCase()))*/}
-      {/*        return <li key={countries.cca2}>{countries.name.common}</li>*/}
-      {/*    }*/}
-      {/*  )}*/}
-      {/*</div>*/}
-
       <div>
         {allCountries.map((countries, index) => {
-          const countriesName = countries.name.common.toLowerCase()
-          if (countriesName.includes(filter.toLowerCase())) {
-            //stocker tout les pays dans {nbCountrie} pour pouvoir les compter avec .length
-            console.log(countriesName) //voir comment compter le nombre de pays avec une boucle peut etre
-            return (
-              <li key={countries.cca2}>{countries.name.common}</li>
-            )
-          }
+            const countriesName = countries.name.common.toLowerCase()
+            if (filterCountries().length === 1) {
+              if (countriesName.includes(filter.toLowerCase())) {
+                return (
+                  <Countries countrie={countries}/>
+                )
+              }
+            } else if (filterCountries().length <= 10) {
+              if (countriesName.includes(filter.toLowerCase())) {
+                return (
+                  <li key={countries.cca2}>{countries.name.common}</li>
+                )
+              }
+            }
           }
         )}
       </div>
-
-      {/*<div>*/}
-      {/*  {allCountries.length < 10 ? 'test' :*/}
-
-      {/*    allCountries.map((countries) =>*/}
-      {/*      <div key={countries.cca2}>*/}
-      {/*        <h2>{countries.name.common}</h2>*/}
-      {/*        <p>capital: {countries.capital}</p>*/}
-      {/*        <p>area: {countries.area} </p>*/}
-      {/*        <b>languages:</b>*/}
-      {/*        <div>*/}
-      {/*          {countries.languages ? (*/}
-      {/*            <ul>*/}
-      {/*              {Object.entries(countries.languages).map(([key, value]:[string, string]) => (*/}
-      {/*                <li key={key}>{value}</li>*/}
-      {/*              ))}*/}
-      {/*            </ul>*/}
-      {/*          ): (*/}
-      {/*            <ul>*/}
-      {/*              <li>No languages define</li>*/}
-      {/*            </ul>*/}
-      {/*          )}*/}
-      {/*        </div>*/}
-      {/*        <div style={{ fontSize: '100px' }}>*/}
-      {/*          {countries.flag}*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    )}*/}
-      {/*</div>*/}
     </div>
   )
 }
