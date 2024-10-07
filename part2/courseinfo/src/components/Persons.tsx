@@ -1,13 +1,13 @@
 import React from 'react'
 
-interface Person {
+interface Persons {
   name: string;
   number: string;
   id: number;
 }
 
 interface PersonsProps {
-  persons: Person[];
+  persons: Persons[];
   filter: string;
 }
 
