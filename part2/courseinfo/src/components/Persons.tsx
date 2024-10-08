@@ -15,7 +15,7 @@ const Persons: React.FC<{persons: Persons[]; filter: string}> = ({persons, filte
   return (
     <div>
       {persons.map((person) => {
-          if (person.name.includes(filter))
+          if (person.name.toLowerCase().includes(filter))
             return <li key={person.id}>{person.name} {person.number}</li>
         }
       )}

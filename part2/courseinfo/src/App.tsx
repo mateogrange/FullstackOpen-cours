@@ -16,7 +16,7 @@ interface PropsApp {
 }
 
 const App: React.FC<PropsApp> = ({persons: initPersons}) => {
-  const [persons, setPersons] = useState<PersonsInt>(initPersons)
+  const [persons, setPersons] = useState<PersonsInt[]>(initPersons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
@@ -57,6 +57,8 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
         .create(nameObject)
         .then(setNewObject => {
             setPersons(persons.concat(setNewObject))
+          setNewName('')
+          setNewNumber('')
         })
     } else {
       alert(newName + ' is already added to phonebook')
