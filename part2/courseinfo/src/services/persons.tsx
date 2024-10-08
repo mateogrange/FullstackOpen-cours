@@ -1,5 +1,5 @@
 import axios from 'axios'
-const basrUrl = 'http://localhost:3001/persons'
+const baseUrl = 'http://localhost:3001/persons'
 
 interface Persons {
   id: number;
@@ -8,13 +8,17 @@ interface Persons {
 }
 
 const getAll = () => {
-  const request = axios.get(basrUrl)
+  const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
 
 const create = (nameObject :Persons)=> {
-  const request = axios.post(basrUrl, nameObject)
+  const request = axios.post(baseUrl, nameObject)
   return request.then(response => response.data)
 }
 
-export default { getAll, create }
+const deleteName = (id: number) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
+export default { getAll, create, deleteName }

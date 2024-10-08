@@ -82,7 +82,7 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
       <h2>Numbers</h2>
       {
         persons
-          ?<Persons persons={persons} filter={filter.toLowerCase()}/>
+          ?<Persons setPersons={setPersons} persons={persons} filter={filter.toLowerCase()}/>
           :<p>test</p>
       }
     </div>
