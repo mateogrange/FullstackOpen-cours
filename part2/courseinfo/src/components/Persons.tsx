@@ -16,15 +16,17 @@ interface PersonsProps {
 const Persons: React.FC<PersonsProps> = ({persons, filter, setPersons}) => {
 
   const handleClick = (id: number) => {
-    personsService
-      .deleteName(id)
-      .then(() => {
-        const updatedPersons = persons.filter(person => person.id !== id);
-        setPersons(updatedPersons)
-      })
-      .catch(error => {
-        console.error("Erreur lors de la suppression", error);
-      });
+    if (window.confirm("Do you really want to leave?")) {
+      personsService
+        .deleteName(id)
+        .then(() => {
+          const updatedPersons = persons.filter(person => person.id !== id);
+          setPersons(updatedPersons)
+        })
+        .catch(error => {
+          console.error("Erreur lors de la suppression", error);
+        });
+    }
   };
 
   return (
