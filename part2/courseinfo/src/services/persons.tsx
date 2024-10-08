@@ -2,7 +2,7 @@ import axios from 'axios'
 const baseUrl = 'http://localhost:3001/persons'
 
 interface Persons {
-  id: number;
+  id: string;
   name: string;
   number: string;
 }
@@ -17,7 +17,7 @@ const create = (nameObject :Persons)=> {
   return request.then(response => response.data)
 }
 
-const deleteName = (id: number) => {
+const deleteName = (id: string) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
 

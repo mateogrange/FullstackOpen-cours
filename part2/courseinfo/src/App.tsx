@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
-import { useState } from 'react'
+import React, {useEffect, useState} from 'react'
+import {v4 as uuid} from "uuid"
 import Persons from './components/Persons'
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import personsService from "./services/persons"
 
 interface PersonsInt {
-  id: number;
+  id: string;
   name: string;
   number: string;
 }
@@ -48,7 +48,7 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
     const nameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      id:  uuid(),
     }
 
     const found = persons.some(el => el.name.toLowerCase() === newName.toLowerCase())

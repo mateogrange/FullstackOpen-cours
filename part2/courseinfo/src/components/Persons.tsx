@@ -4,7 +4,7 @@ import personsService from "./../services/persons"
 interface Persons {
   name: string;
   number: string;
-  id: number;
+  id: string;
 }
 
 interface PersonsProps {
@@ -15,8 +15,8 @@ interface PersonsProps {
 
 const Persons: React.FC<PersonsProps> = ({persons, filter, setPersons}) => {
 
-  const handleClick = (id: number) => {
-    if (window.confirm("Do you really want to leave?")) {
+  const handleClick = (id: string, name: string) => {
+    if (window.confirm(`Do you really want to delete ${name}`)) {
       personsService
         .deleteName(id)
         .then(() => {
@@ -35,7 +35,7 @@ const Persons: React.FC<PersonsProps> = ({persons, filter, setPersons}) => {
           if (person.name.toLowerCase().includes(filter))
             return (
                 <li key={person.id}>{person.name} {person.number}
-                  <button onClick={() => {handleClick(person.id)}}>delete</button>
+                  <button onClick={() => {handleClick(person.id, person.name)}}>delete</button>
                 </li>
             )
         }
