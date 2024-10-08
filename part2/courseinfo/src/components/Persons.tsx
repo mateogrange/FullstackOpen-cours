@@ -11,12 +11,12 @@ interface PersonsProps {
   filter: string;
 }
 
-const Persons: React.FC<PersonsProps> = ({persons, filter}) => {
+const Persons: React.FC<{persons: Persons[]; filter: string}> = ({persons, filter}) => {
   return (
     <div>
-      {persons.map((person, index) => {
+      {persons.map((person) => {
           if (person.name.includes(filter))
-            return <li key={index}>{person.name} {person.number}</li>
+            return <li key={person.id}>{person.name} {person.number}</li>
         }
       )}
     </div>

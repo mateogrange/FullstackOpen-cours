@@ -5,19 +5,23 @@ import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import personsService from "./services/persons"
 
-interface propsApp {
-  persons: {
-    id: string;
-    name: string;
-    number: string;
-  }
+interface PersonsInt {
+  id: number;
+  name: string;
+  number: string;
 }
 
-const App: React.FC<propsApp> = ({persons: initPersons}) => {
-  const [persons, setPersons] = useState(initPersons)
+interface PropsApp {
+  persons: PersonsInt[];
+}
+
+const App: React.FC<PropsApp> = ({persons: initPersons}) => {
+  const [persons, setPersons] = useState<PersonsInt>(initPersons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  console.log(persons)
 
   useEffect(() => {
     personsService
@@ -26,8 +30,6 @@ const App: React.FC<propsApp> = ({persons: initPersons}) => {
         setPersons(initPersons)
       })
   }, []);
-
-  console.log(persons)
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value)
@@ -49,12 +51,13 @@ const App: React.FC<propsApp> = ({persons: initPersons}) => {
       id: persons.length + 1,
     }
 
-    const found = persons.some(el => el.name.toUpperCase() === newName.toUpperCase())
-
-    if(!found){
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+    const found = persons.some(el => el.name.toLowerCase() === newName.toLowerCase())
+    if(!found) {
+      personsService
+        .create(nameObject)
+        .then(setNewObject => {
+            setPersons(persons.concat(setNewObject))
+        })
     } else {
       alert(newName + ' is already added to phonebook')
     }
@@ -63,13 +66,23 @@ const App: React.FC<propsApp> = ({persons: initPersons}) => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter handleFilter={handleFilter} filter={filter}/>
+      <Filter handleFilter={handleFilter} filter={filter.toLowerCase()}/>
 
       <h2>Add a new </h2>
-      <PersonForm addNewName={addNewName} handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} newName={newName} newNumber={newNumber}/>
+      <PersonForm
+        addNewName={addNewName}
+        handleChangeName={handleChangeName}
+        handleChangeNumber={handleChangeNumber}
+        newName={newName}
+        newNumber={newNumber}
+      />
 
       <h2>Numbers</h2>
-      {/*<Persons persons={persons} filter={filter}/>*/}
+      {
+        persons
+          ?<Persons persons={persons} filter={filter.toLowerCase()}/>
+          :<p>test</p>
+      }
     </div>
   )
 }
