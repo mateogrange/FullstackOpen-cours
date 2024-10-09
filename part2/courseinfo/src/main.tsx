@@ -6,7 +6,8 @@ const rootElement = document.getElementById("root");
 
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
-      <App />
+    // @ts-ignore
+    <App />
   );
 } else {
   console.error('No root element found');

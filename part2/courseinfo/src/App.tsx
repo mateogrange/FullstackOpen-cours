@@ -20,8 +20,7 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-
-  console.log(persons)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     personsService
@@ -52,6 +51,7 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
     }
 
     const found = persons.some(el => el.name.toLowerCase() === newName.toLowerCase())
+
     if(!found) {
       personsService
         .create(nameObject)
@@ -61,7 +61,26 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
           setNewNumber('')
         })
     } else {
-      alert(newName + ' is already added to phonebook')
+      if (window.confirm(`${nameObject.name} is already added to phonebook, replace the old number with a new one?`)) {
+
+        console.log(newName, newNumber)
+
+        personsService
+          .getId(newName)
+          .then((response) => {
+            console.log(response.data[0].id)
+            setLoading(false)
+          })
+
+        if (!loading) {
+          personsService
+            .updateNumber(id, nameObject.name, nameObject.number)
+            .then(() => {
+              console.log(nameObject)
+            })
+        }
+
+      }
     }
   }
 

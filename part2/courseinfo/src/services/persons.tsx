@@ -19,6 +19,17 @@ const create = (nameObject :Persons)=> {
 
 const deleteName = (id: string) => {
   return axios.delete(`${baseUrl}/${id}`);
-};
+}
 
-export default { getAll, create, deleteName }
+const getId = (name : string) => {
+  return axios.get(`${baseUrl}?name=${name}`)
+}
+
+const updateNumber = (id: string, name: string, number: string) => {
+  return axios.put(`http://localhost:3001/persons/${id}`, {
+    name: name,
+    number: number
+  })
+}
+
+export default { getAll, create, deleteName, updateNumber, getId }
