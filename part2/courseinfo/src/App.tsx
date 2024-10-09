@@ -20,7 +20,6 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     personsService
@@ -50,36 +49,29 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
       id:  uuid(),
     }
 
-    const found = persons.some(el => el.name.toLowerCase() === newName.toLowerCase())
+    const foundPerson = persons.find(el => el.name.toLowerCase() === newName.toLowerCase());
 
-    if(!found) {
+    if (!foundPerson) {
       personsService
         .create(nameObject)
         .then(setNewObject => {
-            setPersons(persons.concat(setNewObject))
-          setNewName('')
-          setNewNumber('')
+          setPersons(persons.concat(setNewObject));
+          setNewName('');
+          setNewNumber('');
         })
     } else {
       if (window.confirm(`${nameObject.name} is already added to phonebook, replace the old number with a new one?`)) {
-
-        console.log(newName, newNumber)
+        const id = foundPerson.id;
 
         personsService
-          .getId(newName)
-          .then((response) => {
-            console.log(response.data[0].id)
-            setLoading(false)
-          })
-
-        if (!loading) {
-          personsService
-            .updateNumber(id, nameObject.name, nameObject.number)
-            .then(() => {
-              console.log(nameObject)
-            })
-        }
-
+          .updateNumber(id, nameObject.name, nameObject.number)
+          .then(() => {
+            setPersons(persons.map(person =>
+              person.id === id ? { ...person, number: nameObject.number } : person
+            ))
+            setNewName('');
+            setNewNumber('');
+          });
       }
     }
   }
