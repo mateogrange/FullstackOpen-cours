@@ -4,6 +4,7 @@ import Persons from './components/Persons'
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Notification from "./components/Notification";
+import Error from "./components/Error";
 import personsService from "./services/persons"
 import './index.css'
 
@@ -63,11 +64,11 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
           setNewName('');
           setNewNumber('');
 
-          setErrorMessage(
+          setNotification(
             `Added user ${nameObject.name}`
           )
           setTimeout(() => {
-            setErrorMessage('')
+            setNotification('')
           }, 3000)
         })
 
@@ -93,7 +94,8 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
     <div>
       <h1>Phonebook</h1>
 
-      <Notification message={errorMessage}/>
+      <Error message={errorMessage}/>
+      <Notification message={notification}/>
       <Filter handleFilter={handleFilter} filter={filter.toLowerCase()}/>
 
       <h2>Add a new </h2>

@@ -4,15 +4,15 @@ interface Message {
   message: string
 }
 
-const Notification: React.FC<Message> = ({ message }) => {
+const Error: React.FC<Message> = ({ message }) => {
   if (message === '') {
     return null
   }
 
   return (
-    <div className='notification'>
+    <div className='error'>
       {message}
     </div>
   )
 }
-export default Notification
+export default Error
