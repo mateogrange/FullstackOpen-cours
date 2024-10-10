@@ -1,0 +1,20 @@
+h1 {
+    color: midnightblue;
+    font-style: italic;
+}
+
+.persons {
+    color: midnightblue;
+    padding-top: 5px;
+    font-size: 15px;
+}
+
+.error {
+    color: white;
+    background: indianred;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}

@@ -3,7 +3,9 @@ import {v4 as uuid} from "uuid"
 import Persons from './components/Persons'
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import personsService from "./services/persons"
+import './index.css'
 
 interface PersonsInt {
   id: string;
@@ -20,6 +22,8 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [notification, setNotification] = useState('')
 
   useEffect(() => {
     personsService
@@ -58,7 +62,16 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
           setPersons(persons.concat(setNewObject));
           setNewName('');
           setNewNumber('');
+
+          setErrorMessage(
+            `Added user ${nameObject.name}`
+          )
+          setTimeout(() => {
+            setErrorMessage('')
+          }, 3000)
         })
+
+
     } else {
       if (window.confirm(`${nameObject.name} is already added to phonebook, replace the old number with a new one?`)) {
         const id = foundPerson.id;
@@ -71,14 +84,16 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
             ))
             setNewName('');
             setNewNumber('');
-          });
+          })
       }
     }
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+
+      <Notification message={errorMessage}/>
       <Filter handleFilter={handleFilter} filter={filter.toLowerCase()}/>
 
       <h2>Add a new </h2>
@@ -93,7 +108,7 @@ const App: React.FC<PropsApp> = ({persons: initPersons}) => {
       <h2>Numbers</h2>
       {
         persons
-          ?<Persons setPersons={setPersons} persons={persons} filter={filter.toLowerCase()}/>
+          ?<Persons setPersons={setPersons} persons={persons} filter={filter.toLowerCase()} setErrorMessage={setErrorMessage} />
           :<p>test</p>
       }
     </div>
